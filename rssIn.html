@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<title>W3.CSS Template</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<style>
+body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
+.w3-third img{margin-bottom: -6px; opacity: 0.8; cursor: pointer}
+.w3-third img:hover{opacity: 1}
+
+input[type=text], select {
+    width: 100%;
+    padding: 8px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border-radius: 4px;
+    box-sizing: border-box;
+	border: 2px solid gray;
+}
+
+input[type=submit] {
+    width: 100%;
+    background-color: gray;
+    color: white;
+    padding: 8px 15px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type=submit]:hover {
+    background-color: black;
+}
+</style>
+<body class="w3-light-grey w3-content" style="max-width:1600px" onLoad="dataManipulation();">
+
+<!-- Sidebar/menu -->
+
+<nav class="w3-sidebar w3-bar-block w3-white w3-animate-left w3-text-grey w3-collapse w3-top w3-center" style="z-index:3;width:300px;font-weight:bold" id="mySidebar"><br>
+  <h3 class="w3-padding-64 w3-center"><b>RSS Feed</b></h3>
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button w3-padding w3-hide-large">CLOSE</a>
+
+  <div id="changeContent">
+  
+  </div>
+  
+  <a class="w3-bar-item w3-button" onclick="showAddUrl()">Add a news feed</a>
+  <a class="w3-bar-item w3-button" onclick="showDeleteUrl()">Delete a news feed</a>
+  
+  
+</nav>
+
+
+<!-- Top menu on small screens -->
+<header class="w3-container w3-top w3-hide-large w3-white w3-xlarge w3-padding-16">
+  <span class="w3-left w3-padding"></span>
+  <a href="javascript:void(0)" class="w3-right w3-button w3-white" onclick="w3_open()">☰</a>
+</header>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:300px">
+
+  <!-- Push down content on small screens --> 
+  <div class="w3-hide-large" style="margin-top:83px"></div>
+  
+
+
+  <!-- Google section -->
+  <div class="w3-container w3-center w3-padding-32">
+	<div class="w3-content" style="max-width:600px;text-align:justify">
+	<div id="rssOutput"></div>
+  </div>
+
+  <!-- add button section -->
+  <div class="w3-container w3-light-grey w3-padding-32 w3-padding-large" style="display:none" id="addURL">
+    <div class="w3-content" style="max-width:600px">
+	
+	<form action="addURL.php" method="POST">
+		<input type="text" id="" name="name" placeholder="Site Name..">
+		<input type="text" id="" name="url" placeholder="Site URL..">
+		<input type="submit" value="Add News Feed">
+	</form>
+		
+    </div>
+  </div>
+  
+  
+  <!--delete button section-->
+  <div class="w3-container w3-light-grey w3-padding-32 w3-padding-large" style="display:none" id="deleteURL">
+    <div class="w3-content" style="max-width:600px">
+	
+	<form action="deleteURL.php" method="POST">
+		<input type="text" name="name" placeholder="Site Name..">
+		<input type="submit" value="Delete News Feed">
+	</form>
+		
+    </div>
+  </div>
+
+  
+<!-- End page content -->
+</div>
+
+<script>
+function showRSS(str) {
+  if (str.length==0) { 
+    document.getElementById("rssOutput").innerHTML="";
+    return;
+  }
+  if (window.XMLHttpRequest) {
+    // code for IE7+, Firefox, Chrome, Opera, Safari
+    xmlhttp=new XMLHttpRequest();
+  } else {  // code for IE6, IE5
+    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+  xmlhttp.onreadystatechange=function() {
+    if (this.readyState==4 && this.status==200) {
+      document.getElementById("rssOutput").innerHTML=this.responseText;
+    }
+	
+  }
+  xmlhttp.open("GET","rssPhp.php?q="+str,true);
+  xmlhttp.send();
+}
+function w3_open() {
+    document.getElementById("mySidebar").style.display = "block";
+    document.getElementById("myOverlay").style.display = "block";
+}
+ 
+function w3_close() {
+    document.getElementById("mySidebar").style.display = "none";
+    document.getElementById("myOverlay").style.display = "none";
+}
+function showAddUrl(){
+	document.getElementById("addURL").style.display="block";
+	document.getElementById("deleteURL").style.display="none";
+	document.getElementById("rssOutput").style.display="none";
+}
+function showDeleteUrl(){
+	document.getElementById("deleteURL").style.display="block";
+	document.getElementById("addURL").style.display="none";
+	document.getElementById("rssOutput").style.display="none";
+}
+
+function dataManipulation(){
+
+
+//document.getElementById("changeContent").innerHTML="changed";
+
+var xmlhttp = new XMLHttpRequest();
+
+
+xmlhttp.onreadystatechange=function() {
+    if (this.readyState==4 && this.status==200) {
+      document.getElementById("changeContent").innerHTML=this.responseText;
+    }
+	
+  }
+  xmlhttp.open("GET","showFeeds.php",true);
+  xmlhttp.send();
+}
+
+
+function singleTab(provider){	
+var xmlhttp = new XMLHttpRequest();
+
+
+xmlhttp.onreadystatechange=function() {
+    if (this.readyState==4 && this.status==200) {
+      document.getElementById("rssOutput").innerHTML=this.responseText;
+    }
+	
+  }
+  
+  xmlhttp.open("GET","rssPhp.php?q="+provider,true);
+  xmlhttp.send();
+	
+}
+
+
+</script>
+
+
+</body>
+</html>
